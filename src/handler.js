@@ -11,7 +11,6 @@ const addNoteHandler = (request, h) => {
   const newNote = {
     title, tags, body, createdAt, updatedAt,
   };
-
   notes.push(newNote);
 
   const isSuccess = notes.filter((note) => note.id === id).length > 0;
@@ -88,14 +87,36 @@ const editNoteByHandler = (request, h) => {
     });
     response.code(200);
     return response;
-  }
+  };
 };
 
+const deleteNoteByIdHandler = (request, h) => {
+    const { id } = request.params;
+    
+    const index = notes.findIndex((note) note.id === id);
 
+    if (index !== -1) {
+        notes.splice(index, 1);
+        const response = h.response({
+            status: 'success',
+            message: 'Catatan berhasih dihapus',
+        });
+        response.code(200);
+        return response;
+    };
+
+    const response = h.response({
+        status: 'fail',
+        message: 'Catatan gagal dihapus, id tidak ditemukan',
+    });
+    response.code(404);
+    return response
+};
 
 module.exports = {
   addNoteHandler,
   getAllNotesHandler,
   getNoteByIdHandler,
   editNoteByHandler,
+  deleteNoteByIdHandler,
 };
